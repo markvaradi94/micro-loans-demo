@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  loans:
+    container_name: micro-loans
+    image: markvaradi94/micro-loans:latest
+    ports:
+      - "9092:9092"
+    environment:
+      - DATABASE_HOST=loans-db
+      - DATABASE_PORT=3306
+      - DATABASE_USER=loans
+      - DATABASE_PASSWORD=password
+    depends_on:
+      - loans-db
+
+  loans-db:
+    container_name: loans-db
+    image: mysql:8-oracle
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: loans
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: loans
+    ports:
+      - "3309:3306"
+    volumes:
+      - loans-data:/var/lib/mysql
+
+volumes:
+  loans-data:
